@@ -1,0 +1,6 @@
+.cph
+.vscode
+*.dSYM
+*.bin
+*.exe
+*.bin
