@@ -1,68 +1,93 @@
+#include <iostream>
 #include <vector>
+using namespace std;
 
 // ------------------------------------------------------------
 // Function: merge
-// Purpose : Merge two sorted subarrays
+// Shows merging process step-by-step
 // ------------------------------------------------------------
-void merge(std::vector<int>& arr, int left, int mid, int right)
+void merge(vector<int>& arr, int left, int mid, int right)
 {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
+    cout << "\nMerging from index " << left << " to " << right << endl;
 
-    // Temporary arrays
-    std::vector<int> L(n1), R(n2);
+    int leftSize  = mid - left + 1;
+    int rightSize = right - mid;
+
+    vector<int> leftArr(leftSize);
+    vector<int> rightArr(rightSize);
 
     // Copy data
-    for (int i = 0; i < n1; i++)
-        L[i] = arr[left + i];
+    for (int i = 0; i < leftSize; i++)
+        leftArr[i] = arr[left + i];
 
-    for (int j = 0; j < n2; j++)
-        R[j] = arr[mid + 1 + j];
+    for (int i = 0; i < rightSize; i++)
+        rightArr[i] = arr[mid + 1 + i];
+
+    cout << "Left Array:  ";
+    for (int x : leftArr) cout << x << " ";
+
+    cout << "\nRight Array: ";
+    for (int x : rightArr) cout << x << " ";
+    cout << endl;
 
     int i = 0, j = 0, k = left;
 
-    // Merge the temp arrays back into arr
-    while (i < n1 && j < n2)
+    // Merge process
+    while (i < leftSize && j < rightSize)
     {
-        if (L[i] <= R[j])
+        if (leftArr[i] <= rightArr[j])
         {
-            arr[k] = L[i];
+            arr[k] = leftArr[i];
+            cout << "Placed " << leftArr[i] << " at index " << k << endl;
             i++;
         }
         else
         {
-            arr[k] = R[j];
+            arr[k] = rightArr[j];
+            cout << "Placed " << rightArr[j] << " at index " << k << endl;
             j++;
         }
         k++;
     }
 
-    // Copy remaining elements
-    while (i < n1)
+    // Remaining elements
+    while (i < leftSize)
     {
-        arr[k] = L[i];
+        arr[k] = leftArr[i];
+        cout << "Placed remaining " << leftArr[i] << " at index " << k << endl;
         i++;
         k++;
     }
 
-    while (j < n2)
+    while (j < rightSize)
     {
-        arr[k] = R[j];
+        arr[k] = rightArr[j];
+        cout << "Placed remaining " << rightArr[j] << " at index " << k << endl;
         j++;
         k++;
     }
+
+    cout << "Array after merge: ";
+    for (int x : arr) cout << x << " ";
+    cout << endl;
 }
 
 // ------------------------------------------------------------
 // Function: mergeSort
-// Purpose : Sort array using Merge Sort
-// Time    : O(n log n)
-// Space   : O(n)
+// Shows recursive calls
 // ------------------------------------------------------------
-void mergeSort(std::vector<int>& arr, int left, int right)
+void mergeSort(vector<int>& arr, int left, int right)
 {
+    cout << "\nmergeSort called for index range [" 
+         << left << ", " << right << "]";
+
     if (left >= right)
+    {
+        cout << " → Single element, return\n";
         return;
+    }
+
+    cout << endl;
 
     int mid = left + (right - left) / 2;
 
@@ -70,4 +95,24 @@ void mergeSort(std::vector<int>& arr, int left, int right)
     mergeSort(arr, mid + 1, right);
 
     merge(arr, left, mid, right);
+}
+
+// ------------------------------------------------------------
+// Main Function
+// ------------------------------------------------------------
+int main()
+{
+    vector<int> arr = {5, 2, 4, 1};
+
+    cout << "Original Array: ";
+    for (int x : arr) cout << x << " ";
+    cout << endl;
+
+    mergeSort(arr, 0, arr.size() - 1);
+
+    cout << "\nFinal Sorted Array: ";
+    for (int x : arr) cout << x << " ";
+    cout << endl;
+
+    return 0;
 }
